@@ -10,6 +10,7 @@ Integrating security into each stage of the software development lifecycle is kn
 ## **2. Steps Performed**
 
 ### **Step 1: Clone the DevSecOps Crash Course Repository.**
+
 ### **Step 2: Understand the repo structure (review Anna’s GitHub Actions tutorial if needed).**
 ### **Step 3: Use GitHub Actions templates to set up workflow.**
 ### **Step 4: List the security scan jobs included in the workflow.**

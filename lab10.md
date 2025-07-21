@@ -158,8 +158,6 @@ I reviewed the security output of our Docker image using Docker Scout. The goal 
 
 Docker Scout was used within a GitHub Actions workflow. The Docker image was built and scanned using both the `quickview` and `cves` commands to provide a summary and detailed list of vulnerabilities.
 
----
-
 #### **Changes Made**
 - Built Docker image myapp:latest using the local Dockerfile.
 - Installed and executed Docker Scout CLI in the GitHub Actions pipeline.
@@ -220,21 +218,38 @@ only-severities: critical,high
 ## **3. Screenshots**
 
 ### **GitHub Actions CI output**
-![o	GitHub Actions CI output](https://github.com/ahmedsiddig1/Lab10/blob/main/Images/GitHub%20Actions%20CI%20output.png)
+![GitHub Actions CI output](https://github.com/ahmedsiddig1/Lab10/blob/main/Images/GitHub%20Actions%20CI%20output.png)
+**What it shows:**  
+This screenshot shows a completed GitHub Actions workflow named `CI` triggered by a push. It includes two jobs: `sast_scan` (for Bandit static analysis) and `image_scan` (for Docker image scanning). Both jobs are completed successfully.
 
+**Why it matters for secure CI/CD:**  
+It proves the secure pipeline is working. Each time new code is pushed, security scans and image builds are automatically triggered. This is a key DevSecOps practice — automating security from the start.
+
+**Why it matters for secure CI/CD:**  
+It proves the secure pipeline is working. Each time new code is pushed, security scans and image builds are automatically triggered. This is a key DevSecOps practice — automating security from the start.
 ### **Bandit scan results**
-![o	Bandit scan results](https://github.com/ahmedsiddig1/Lab10/blob/main/Images/Bandit%20scan%20results.png)
-### **Docker Scout scan logs**
-![Docker Scout scan logs]()
+![Bandit scan results](https://github.com/ahmedsiddig1/Lab10/blob/main/Images/Bandit%20scan%20results.png)
+**What it shows:**  
+This screenshot shows the Bandit static code analysis running inside GitHub Actions under the `sast_scan` job. It captures the CI log output from the step that executes `bandit -ll -ii -r . -f json -o bandit-report.json`. The output confirms that the scan completed and reported issues in the code.
+
+**Why it matters for secure CI/CD:**  
+Running Bandit in CI ensures every code commit is automatically checked for security vulnerabilities like insecure imports, hardcoded credentials, or unsafe function usage. This builds a shift-left security approach where developers get security feedback early, before code merges or deployments.
+
 ### **GitHub Actions YAML workflow**
 ![GitHub Actions YAML workflow](https://github.com/ahmedsiddig1/Lab10/blob/main/Images/GitHub%20Actions%20YAML%20workflow.png)
+**What it shows:**  
+This screenshot displays the contents of `.github/workflows/main.yml`. It defines two jobs (`sast_scan`, `image_scan`) and includes steps to install Bandit, run Docker build/push, and perform image scanning with Docker Scout.
+
+**Why it matters for secure CI/CD:**  
+Storing workflows as code ensures your CI/CD process is versioned and auditable. It also enables consistent security checks for every commit, PR, or deployment.
+
 ### **App running on cloud (browser view)**
 ![App running on cloud (browser view)](https://github.com/ahmedsiddig1/Lab10/blob/main/Images/App%20running%20on%20cloud%20(browser%20view).png)
-### **Report attachments**
-![Report attachments]()
-### **Instance/server dashboard**
-![Instance/server dashboard](https://github.com/ahmedsiddig1/Lab10/blob/main/Images/Instance%20server%20dashboard.png)
+**What it shows:**  
+This screenshot shows the PyGoat app running in a browser, accessed via the Azure VM’s public IP address. It confirms that the app is deployed and publicly accessible.
 
+**Why it matters for secure CI/CD:**  
+This demonstrates end-to-end CI/CD with security built in. The app was only deployed after passing scans, showing how security gates can block unsafe releases.
 
 ---
 

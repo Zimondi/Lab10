@@ -5,7 +5,7 @@
 ## **1. Introduction**
 In order to guarantee that security is incorporated into the software development lifecycle from the beginning, DevSecOps combines development, security, and operations into a single process.  It places a strong emphasis on teamwork, automation, and ongoing security testing.
 
- In this lab, we use Docker Scout to check Docker images for vulnerabilities and GitHub Actions to automate CI/CD pipelines with integrated security scanning phases.  These solutions improve overall security posture and speed up safe software delivery by assisting in the early detection, reporting, and remediation of security vulnerabilities..
+ In this lab, I used Docker Scout to check Docker images for vulnerabilities and GitHub Actions to automate CI/CD pipelines with integrated security scanning phases.  These solutions improve overall security posture and speed up safe software delivery by assisting in the early detection, reporting, and remediation of security vulnerabilities..
 
 ---
 
@@ -33,7 +33,7 @@ After cloning the GitLab CI/CD tutorial project, I analyzed the file structure t
 
 ### **Step 3: Use GitHub Actions templates to set up workflow.**
 #### **What Was Done:**
-Copied existing workflow YAML template or created new `.github/workflows/ci.yml` to automate the build, test, and scan steps.
+Copied existing workflow YAML template `.github/workflows/main.yml` to automate the build, test, and scan steps.
 
 ### **Step 4: List the security scan jobs included in the workflow.**
 #### **What Was Done**
@@ -46,10 +46,10 @@ The following security scan jobs were included in the workflow:
 #### **What was done:**  
 I configured the GitHub Actions workflow directly in GitHub to run a Bandit Static Application Security Testing (SAST) scan on the Python app. This involved setting up the Python environment, installing Bandit, running the scan, and uploading the scan report as an artifact for review.
 #### **changes made:**  
-- Created and edited the workflow YAML file in the GitHub repository under `.github/workflows/ci.yml`.  
+- Created and edited the workflow YAML file in the GitHub repository under `.github/workflows/main.yml`.  
 - Used GitHub Actions  to set up Python.  
--Set up Python environment via GitHub Actions
--Ran Bandit scan against the Python app source
+- Set up Python environment via GitHub Actions
+- Ran Bandit scan against the Python app source
 
 ### **Step 6: Review Bandit scan results:**
 - #### **What did the scan detect?**
@@ -59,8 +59,8 @@ The Bandit scan detected potential security issues in the Python application cod
 A job failure in the Bandit scan typically means that the scan found one or more security issues that meet or exceed the defined severity threshold, causing the CI job to fail to prevent unsafe code from progressing further in the pipeline.
 
 - #### **Discuss severity vs. confidence levels**
-- **Severity** indicates the potential impact of the vulnerability if exploited, classified as low, medium, or high.
-- **Confidence** measures how certain the tool is that the identified issue is a true positive, also classified as low, medium, or high.
+ - **Severity** indicates the potential impact of the vulnerability if exploited, classified as low, medium, or high.
+ - **Confidence** measures how certain the tool is that the identified issue is a true positive, also classified as low, medium, or high.
 Understanding both helps prioritize which issues to address first — high severity with high confidence should be fixed urgently, while low severity or low confidence findings may require further investigation or can be deprioritized.
 
 ### **Step 7: Modify the workflow to ignore low-severity, low-confidence issues.**
@@ -119,14 +119,15 @@ A **combined approach** is most effective: automated tools catch obvious and kno
 
 ### **Step 11: Upload Bandit report to a vulnerability management tool (e.g., Snyk).**
 #### **What was done:**
--Signed up and logged into https://app.snyk.io
--Connected GitHub repo to Snyk for automated vulnerability scanning
+- Signed up and logged into https://app.snyk.io
+- Connected GitHub repo to Snyk for automated vulnerability scanning
+  
 ### **Step 12: Ensure failed steps don’t block critical job (e.g., report upload).**
 #### **What was done:**
 Used `--exit-zero` in the  `run: bandit -ll -ii -r . -f json -o bandit-report.json --exit-zero`
 
 ### **Step 13: Add Docker image scanning using Docker Scout:**
-**What was done:**
+#### **What was done:**
 In this step, Docker Scout was integrated into the CI/CD pipeline to perform security scanning on the Docker image built from the PyGoat application. The goal was to identify any known vulnerabilities within the containerized environment. The following actions were completed:
 - Docker Scout CLI was installed using the official script.
 - The Docker image was built using the provided Dockerfile.
@@ -136,15 +137,15 @@ In this step, Docker Scout was integrated into the CI/CD pipeline to perform sec
 #### **Compare both and explain the use-case for each.**
 
 **Use-case Comparison:**
-- docker scout quickview:
-  Provides a quick, high-level summary of the container image’s security   posture. It highlights the number of critical, high, medium, and low vulnerabilities, giving a risk overview that’s useful for triage.
+ - **docker scout quickview:**
+   Provides a quick, high-level summary of the container image’s security   posture. It highlights the number of critical, high, medium, and low vulnerabilities, giving a risk overview that’s useful for triage.
 
-- docker scout cves:
-  Offers a comprehensive listing of vulnerabilities by CVE ID, including severity, CVSS score, affected packages, and available fixes. This is particularly helpful for making informed remediation decisions.
+ - **docker scout cves:**
+   Offers a comprehensive listing of vulnerabilities by CVE ID, including severity, CVSS score, affected packages, and available fixes. This is particularly helpful for making informed remediation decisions.
     
 ### **Step 14: Handle secrets/variables securely in GitHub Actions.**
 #### **What was done:**
-Added sensitive credentials like DockerHub username/password to GitHub Secrets (REPO_USER, REPO_PWD). Used them in workflow with ${{ secrets.REPO_USER }} to avoid exposure.
+Added sensitive credentials like DockerHub username/password to GitHub Secrets `(REPO_USER, REPO_PWD)`. Used them in workflow with `${{ secrets.REPO_USER }}` to avoid exposure.
 
 ### **Step 15: Review Docker Scout output:**
 #### Description of What Was Done
@@ -158,7 +159,7 @@ Docker Scout was used within a GitHub Actions workflow. The Docker image was bui
 
 ---
 
-####** Changes Made**
+#### **Changes Made**
 - Built Docker image myapp:latest using the local Dockerfile.
 - Installed and executed Docker Scout CLI in the GitHub Actions pipeline.
 - The image scan indexed 299 packages, including both base and application-level packages.
@@ -213,8 +214,6 @@ The Docker Scout GitHub Action was updated to filter out all vulnerabilities exc
 ```yaml
 only-severities: critical,high
 ```
-
-
 ---
 
 ## **3. Screenshots**

@@ -83,7 +83,7 @@ The following command was used to run Bandit and generate the report in this for
 `run: bandit -ll -ii -r . -f json -o bandit-report.json --exit-zero`
 
 **Report**
-[Report in JSON file](https://github.com/ahmedsiddig1/Lab10/blob/main/bandit-report.json)
+[Report in JSON file](https://github.com/ahmedsiddig1/Lab10/blob/main/bandit-report.json))
 
 ### **Step 10: Discuss Human vs. Automated Review of Reports**
 
@@ -219,21 +219,50 @@ only-severities: critical,high
 ## **3. Screenshots**
 
 ### **GitHub Actions CI output**
+![o	GitHub Actions CI output](https://github.com/ahmedsiddig1/Lab10/blob/main/Images/GitHub%20Actions%20CI%20output.png)
+
 ### **Bandit scan results**
+![o	Bandit scan results](https://github.com/ahmedsiddig1/Lab10/blob/main/Images/Bandit%20scan%20results.png)
 ### **Docker Scout scan logs**
+![Docker Scout scan logs]()
 ### **GitHub Actions YAML workflow**
+![GitHub Actions YAML workflow](https://github.com/ahmedsiddig1/Lab10/blob/main/Images/GitHub%20Actions%20YAML%20workflow.png)
 ### **App running on cloud (browser view)**
+![App running on cloud (browser view)](https://github.com/ahmedsiddig1/Lab10/blob/main/Images/App%20running%20on%20cloud%20(browser%20view).png)
 ### **Report attachments**
+![Report attachments]()
 ### **Instance/server dashboard**
-### **Your name and date on at least one screenshot**
+![Instance/server dashboard](https://github.com/ahmedsiddig1/Lab10/blob/main/Images/Instance%20server%20dashboard.png)
+
 
 ---
 
 ## **4. Findings and Reflection**
 
 ### **What security practices did you implement?**
+- Used GitHub Secrets to securely store sensitive information like DockerHub credentials.
+- Ran Bandit to perform static analysis on Python code and generated a SARIF report.
+- Implemented Docker Scout to scan container images for known vulnerabilities (CVEs).
+- Configured Docker Scout to ignore low-severity vulnerabilities and only report critical/high issues.
+- Used GitHub Marketplace verified actions (like `docker/scout-action`) to avoid running untrusted code.
+- Uploaded vulnerability reports securely using `actions/upload-artifact`.
+
 ### **What were your biggest challenges?**
-### **How does GitHub Actions + Docker Scout compare to other CI/CD security tools?**
+- Initial setup of Docker Scout CLI inside GitHub Actions runner was tricky — had to install and configure it manually before switching to the Marketplace action.
+- Managing DockerHub credentials securely required understanding the right environment variable names and GitHub Secrets syntax.
+- Filtering low-severity issues in Docker Scout required custom YAML configuration and testing to get the output right.
+- Understanding how SARIF reports work and where to locate the results for review was also a learning curve.
+- Adjusting the pipeline to continue even if scan jobs fail (e.g., to ensure artifacts are uploaded) required careful use of `if: always()`.
+
+### How does GitHub Actions + Docker Scout compare to other CI/CD security tools?
+
+- **Integration Simplicity:** GitHub Actions and Docker Scout offer native integration with GitHub, making setup easier than tools like Jenkins or GitLab CI.
+- **Security Focus:** Docker Scout provides specific vulnerability scanning tied to containers, while tools like Snyk or Trivy offer broader language/package scanning.
+- **Customization:** GitHub Actions is very flexible, but more manual configuration is needed compared to platforms like CircleCI or GitHub Advanced Security (which includes CodeQL).
+- **Report Integration:** GitHub allows uploading SARIF reports, enabling integration with Security tab insights—this is a powerful feature compared to basic email reports in other CI tools.
+- **Cost:** GitHub Actions and Docker Scout are free for public repos and limited use on private ones, making them great for open-source or academic projects.
+
+Overall, GitHub Actions + Docker Scout provided a powerful, secure, and cost-effective way to automate security scans in a CI/CD pipeline. It helped enforce secure coding and image practices while keeping the pipeline flexible and auditable.
 
 
 

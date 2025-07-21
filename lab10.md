@@ -81,8 +81,10 @@ A Bandit security scan was run on the Python project to generate a detailed secu
 #### **Commands used:**
 The following command was used to run Bandit and generate the report in this format:
 `run: bandit -ll -ii -r . -f json -o bandit-report.json --exit-zero`
+
 **Report**
 [Report in JSON file](https://github.com/ahmedsiddig1/Lab10/blob/main/bandit-report.json)
+
 ### **Step 10: Discuss Human vs. Automated Review of Reports**
 
 #### **Automated Review:**

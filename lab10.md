@@ -273,8 +273,8 @@ This demonstrates end-to-end CI/CD with security built in. The app was only depl
 ### How does GitHub Actions + Docker Scout compare to other CI/CD security tools?
 
 - **Integration Simplicity:** GitHub Actions and Docker Scout offer native integration with GitHub, making setup easier than tools like Jenkins or GitLab CI.
-- **Security Focus:** Docker Scout provides specific vulnerability scanning tied to containers, while tools like Snyk or Trivy offer broader language/package scanning.
-- **Customization:** GitHub Actions is very flexible, but more manual configuration is needed compared to platforms like CircleCI or GitHub Advanced Security (which includes CodeQL).
+- **Security Focus:** Docker Scout provides specific vulnerability scanning tied to containers, while tools like Snyk language/package scanning.
+- **Customization:** GitHub Actions is very flexible, but more manual configuration is needed .
 - **Report Integration:** GitHub allows uploading SARIF reports, enabling integration with Security tab insights—this is a powerful feature compared to basic email reports in other CI tools.
 - **Cost:** GitHub Actions and Docker Scout are free for public repos and limited use on private ones, making them great for open-source or academic projects.
 

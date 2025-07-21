@@ -126,18 +126,94 @@ A **combined approach** is most effective: automated tools catch obvious and kno
 Used `--exit-zero` in the  `run: bandit -ll -ii -r . -f json -o bandit-report.json --exit-zero`
 
 ### **Step 13: Add Docker image scanning using Docker Scout:**
-  - #### **Use docker scout quickview and docker scout cves**
-  - #### **Compare both and explain the use-case for each.**
+**What was done:**
+In this step, Docker Scout was integrated into the CI/CD pipeline to perform security scanning on the Docker image built from the PyGoat application. The goal was to identify any known vulnerabilities within the containerized environment. The following actions were completed:
+- Docker Scout CLI was installed using the official script.
+- The Docker image was built using the provided Dockerfile.
+- Two scanning commands were executed:
+  - `docker scout quickview` to get a high-level security summary.
+  - `docker scout cves` to view detailed information on CVEs (Common Vulnerabilities and Exposures).
+#### **Compare both and explain the use-case for each.**
+
+**Use-case Comparison:**
+- docker scout quickview:
+  Provides a quick, high-level summary of the container image’s security   posture. It highlights the number of critical, high, medium, and low vulnerabilities, giving a risk overview that’s useful for triage.
+
+- docker scout cves:
+  Offers a comprehensive listing of vulnerabilities by CVE ID, including severity, CVSS score, affected packages, and available fixes. This is particularly helpful for making informed remediation decisions.
+    
 ### **Step 14: Handle secrets/variables securely in GitHub Actions.**
+#### **What was done:**
+Added sensitive credentials like DockerHub username/password to GitHub Secrets (REPO_USER, REPO_PWD). Used them in workflow with ${{ secrets.REPO_USER }} to avoid exposure.
+
 ### **Step 15: Review Docker Scout output:**
+#### Description of What Was Done
+
+I reviewed the security output of our Docker image using Docker Scout. The goal was to:
+
+- Determine if Docker Scout scans dependencies beyond the base image.
+- Check whether fixes are available for discovered vulnerabilities.
+
+Docker Scout was used within a GitHub Actions workflow. The Docker image was built and scanned using both the `quickview` and `cves` commands to provide a summary and detailed list of vulnerabilities.
+
+---
+
+####** Changes Made**
+- Built Docker image myapp:latest using the local Dockerfile.
+- Installed and executed Docker Scout CLI in the GitHub Actions pipeline.
+- The image scan indexed 299 packages, including both base and application-level packages.
+- Detected vulnerabilities and recommended upgrading from python:3.11-slim to python:3.13-slim.
+
   - #### **Are dependencies beyond base image scanned?**
+    Yes. Docker Scout scanned 299 packages, which include both base image libraries and application-installed dependencies.
   - #### **Can you find fixed versions for all vulnerabilities?**
+    Partially. Some vulnerabilities have known fixes (e.g., upgrading to a newer base image), but others do not yet have available patches. Manual package upgrades may be required in some cases.
+
+#### **Issues Encountered**
+Received a warning about Docker credentials being stored unencrypted in GitHub Actions
+
 ### **Step 16: Adjust Docker Scout scan to ignore low severity results.**
+#### **What Was Done**
+To reduce noise and improve clarity in the vulnerability scan reports, the Docker Scout GitHub Action was configured to ignore **low** and **unknown** severity vulnerabilities. This adjustment ensures that only vulnerabilities of **medium**, **high**, or **critical** severity are reported, allowing developers to focus on the most impactful security issues.
+
+#### **Commands used:**
+The following configuration was added to the GitHub Actions workflow file located at `.github/workflows/ci.yml`:
+
+```yaml
+    only-severities: critical,high,medium
+```
+
+### **Changes Made**
+- Switched from using manual CLI steps (curl, sh install.sh) to the official Docker Scout GitHub Action for improved integration and maintainability.
+- Generated and uploaded a SARIF-formatted report for use with GitHub Advanced Security or other static analysis tools.
+
 ### **Step 17: Use the GitHub Marketplace version of docker-scout-action and explain its benefits.**
+#### **What Was Done**
+To standardize and improve security scanning, the GitHub Marketplace version of `docker-scout-action` was used instead of installing and running Docker Scout manually via shell commands.
+
+#### **Commands / Configuration**
+
+The following snippet was added to the GitHub Actions workflow (`.github/workflows/ci.yml`):
+
+```yaml
+  uses: docker/scout-action@v1.0.9
+```
+#### **Benefits of Using the Marketplace Version**
+- Security: Managed and maintained by Docker with verified updates.
+- Reliability: Integrates cleanly with GitHub Actions without needing manual installation or shell scripts.
+- Simplified CI/CD Integration: Offers first-class support for uploading SARIF reports and controlling scan filters.
+- Customization: Easily customize scan behavior using inputs like only-severities, command, and artifact output.
+- Audit-Friendly: Built-in support for GitHub Advanced Security and centralized reporting.
+  
 ### **Step 18: Configure Docker Scout to only report critical and high vulnerabilities.**
-### **Step 19: Ensure screenshots, logs, and reports are captured for your final submission.**
-### **Step 20: Destroy your cloud instance to avoid charges.**
-### **Step 21: Ensure your CI pipeline runs securely without exposing terminal access.**
+#### **What Was Done**
+The Docker Scout GitHub Action was updated to filter out all vulnerabilities except those with **critical** and **high** severity.
+
+#### **Key Line Changed in Workflow YAML**
+```yaml
+only-severities: critical,high
+```
+
 
 ---
 
